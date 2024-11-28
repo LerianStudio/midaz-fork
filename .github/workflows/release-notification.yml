@@ -49,7 +49,6 @@ jobs:
           SLACK_CHANNEL: "Marvin" # Channel of Slack
           SLACK_COLOR: "#36a64f"
           SLACK_ICON_EMOJI: ":rocket"
-          SLACK_MSG_AUTHOR: "Lerian-Release-Product-Notification"
+          SLACK_TITLE: "Midaz New Release: ${{ steps.latest_release.outputs.tag }} \n \n"
           SLACK_MESSAGE: "🎉 *Nova Release Publicada!* \n \n *Versão: ${{ steps.latest_release.outputs.tag }}* \n \n <https://github.com/${{ github.repository }}/releases/tag/${{ steps.latest_release.outputs.tag }} | *Clique aqui para detalhes*>"
-          SLACK_TITLE: "Midaz New Release: ${{ steps.latest_release.outputs.tag }}"
           SLACK_WEBHOOK: ${{ secrets.RELEASE_WEBHOOK_NOTIFICATION_URL }} # Webhook Release Notification
