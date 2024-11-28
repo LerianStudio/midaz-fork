@@ -46,9 +46,9 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         if: '!github.event.release.prerelease'
         env:
-          SLACK_CHANNEL: "lerian-product-release" # Channel of Slack
+          SLACK_CHANNEL: "Marvin" # Channel of Slack
           SLACK_COLOR: "#36a64f"
-          SLACK_ICON: "🚀"
+          SLACK_ICON_EMOJI: ":rocket"
           SLACK_MSG_AUTHOR: "Lerian-Release-Product-Notification"
           SLACK_MESSAGE: "🎉 *Nova Release Publicada!* \n \n *Versão: ${{ steps.latest_release.outputs.tag }}* \n \n <https://github.com/${{ github.repository }}/releases/tag/${{ steps.latest_release.outputs.tag }} | *Clique aqui para detalhes*>"
           SLACK_TITLE: "Midaz New Release: ${{ steps.latest_release.outputs.tag }}"
