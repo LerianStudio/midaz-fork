@@ -35,6 +35,8 @@ jobs:
 
       - name: Fetch Latest Release
         id: latest_release
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           RAW_RELEASE=$(gh release list --repo $GITHUB_REPOSITORY --limit 1 --json tagName --jq '.[0].tagName')
           echo "Raw release: $RAW_RELEASE"
