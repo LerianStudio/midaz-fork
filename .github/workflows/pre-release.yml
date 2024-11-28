@@ -1,0 +1,104 @@
+name: "Pre-Release"
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: read
+  security-events: write
+
+jobs:
+  #Job to execute CodeQL  
+  codeql:
+    runs-on: ubuntu-latest
+    name: Run CodeQL
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [go]
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: autobuild
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{ matrix.language }}"
+
+  #Job to execute GolangCI
+  golangci_lint:
+    runs-on: ubuntu-latest
+    name: Run GoLangCI-Lint
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Run GoLangCI-Lint
+      uses: golangci/golangci-lint-action@v4
+      with:
+        version: latest
+
+  #Job to execute GoSec
+  gosec:
+    runs-on: ubuntu-latest
+    name: Run GoSec
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Run GoSec Scanner
+      uses: securego/gosec@master
+      with:
+        args: ./...
+        
+  #Job to execute Unit Tests
+  unit_tests:
+    runs-on: ubuntu-latest
+    name: Run Unit Tests
+    env:
+      WORKING_DIR: components/ledger
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Run Unit Tests
+      working-directory: ${{ env.WORKING_DIR }}
+      shell: bash
+      run: make test
